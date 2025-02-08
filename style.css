@@ -1,0 +1,120 @@
+/*tag selector*/
+/*font-family - specifies the style of the text'font*/
+/*text-align - specifies the horizontal alignment of text*/
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+/*max-wdith sets the maximum size of the elemnt is allow to have, px stands for pixels.*/
+hr {
+    border: 1px solid black;
+    max-width: 480px;
+}
+
+h1 {
+    color: blue;
+}
+
+/*id selector*/
+/*background-color - defines the color of the background, in this case the value is in hex code*/
+/*width - defines the width of the element, in this case the value is in pixels*/
+/*height - defines the height of the element, in this case the value is in pixels*/
+/*margin - defines the space around the element, in this case the value is 0 auto, which means that the top and bottom margin is 0 and the left and right margin is auto*/
+/*border - defines the border of the element, in this case the value is 6px solid #bbada0, which means that the border is 6 pixels wide, solid and the color is #bbada0*/
+/*display - defines the display type of the element, in this case the value is flex, which means that the element is a flex container*/
+/*flex-wrap - defines the wrapping of the flex items, in this case the value is wrap, which means that the flex items will wrap onto multiple lines from top to bottom*/
+#board{
+    background-color: #cdc1b5;
+    width: 400px;
+    height: 400px;
+    margin: 0 auto;
+    border: 6px solid #bbada0;
+
+    display: flex;
+    flex-wrap: wrap
+}
+
+/*class selector*/
+.tile{
+    width: 90px;
+    height: 90px;
+    border: 5px solid #bbada0;
+    font-size: 40px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.x2 {
+    background-color: #eee4da;
+    color: #727371;
+
+}
+
+.x4 {
+    background-color: #ece0ca;
+    color: #727371;
+}
+
+.x8 {
+    background-color: #f4b17a;
+    color: white;
+}
+
+.x16 {
+    background-color: #f59575;
+    color: white;
+}
+
+.x32 {
+    background-color: #f57c5f;
+    color: white;
+}
+
+.x64{
+    background-color: #f65d3b;
+    color: white;
+}
+
+.x128{
+    background-color: #edce71;
+    color: white;
+}
+
+.x256{
+    background-color: #edce63;
+    color: white;
+}
+
+.x512{
+    background-color: #edc651;
+    color: white;
+}
+
+.x512{
+    background-color: #edc651;
+    color: white;
+}
+
+.x1024{
+    background-color: #eec744;
+    color: white;
+}
+
+.x2048{
+    background-color: #eec230;
+    color: white;
+}
+
+.x4096{
+    background-color: #fe3d3d;
+    color: white;
+}
+
+.x8192{
+    background-color: #ff2020;
+    color: white;
+}
