@@ -73,7 +73,6 @@ window.onload = function(){
 
 function handleSlide(event){
     
-
     if(["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.code)){
         if(event.code == "ArrowRight"){
             slideRight();
