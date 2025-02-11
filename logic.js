@@ -38,7 +38,6 @@ function setGame(){
     // This will set two random tiles to the board
     setOne();
     setOne();
-
 }
 
 
@@ -264,3 +263,10 @@ function setOne(){
     }
 
 }
+
+//score system function
+let btn = document.getElementById("btn");
+btn.addEventListener("click", function(){
+    console.log("test");
+    alert("Your score is: " + "Test Button!");
+});
