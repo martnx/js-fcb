@@ -4,6 +4,7 @@ let score = 0;
 
 let rows = 4;
 let columns = 4;
+let moveInProgress = false; //for flagging if a move is in progress
 
 // we are going to contain array of arrays in board, nested array, 2d arrray, matrix
 
@@ -22,15 +23,10 @@ function setGame(){
     // create the game board on the HTML document
     for(let r = 0; r < rows; r++){
         for(let c = 0; c < columns; c++){
-
             let tile = document.createElement("div");
-            
             tile.id = r + '-' + c;
-
             let num = board[r][c];
-
             updateTile(tile, num);
-
             document.getElementById("board").append(tile);
         }
     }
@@ -46,16 +42,12 @@ function updateTile(tile, num){
 
     //clear the title
     tile.innerText = "";
-
     // clear the classList to avoid multiple classes
     tile.classList.value = "";
-
     tile.classList.add("tile");
-
     if(num > 0){
         tile.innerText = num;
         tile.classList.add("tile" + num);
-        
         if(num <= 4096){
             tile.classList.add("x" + num);
         }else{
@@ -71,21 +63,22 @@ window.onload = function(){
 }
 
 function handleSlide(event){
-    
-    if(["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.code)){
-        if(event.code == "ArrowRight"){
+    if(["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "KeyW", "KeyS", "KeyD","KeyA"].includes(event.code)){
+        moveInProgress = true;
+        if(event.code == "ArrowRight" || event.code == "KeyD"){
             slideRight();
             setOne();
-        }else if(event.code == "ArrowUp"){
+        }else if(event.code == "ArrowUp" || event.code == "KeyW"){
             slideUp();
             setOne();
-        }else if(event.code == "ArrowDown"){
+        }else if(event.code == "ArrowDown" || event.code == "KeyS"){
             slideDown();
             setOne();
-        }else if(event.code == "ArrowLeft"){
+        }else if(event.code == "ArrowLeft" || event.code == "KeyA"){
             slideLeft();
             setOne();
         }
+        moveInProgress = false;
     }
 
 }
@@ -94,7 +87,6 @@ function handleSlide(event){
 document.addEventListener("keydown", handleSlide);
 
 function slideLeft(){
-    console.log("Slide Left");	
     for(let r = 0; r< rows; r++){
         // current array from the row
         let row = board[r]; //[0, 2, 2, 0] => [2, 2]
@@ -116,8 +108,6 @@ function slideLeft(){
 }
 
 function slideRight(){
-    console.log("Slide Right");
-
     for(let r = 0; r < rows; r++){
         
         // [0, 2, 2, 0], => [0, 0, 4, 4]
@@ -144,15 +134,11 @@ function slideRight(){
 }
 
 function slideUp(){
-    console.log("Slide Up");
-
     for(let c = 0; c < columns; c++){
         // the elements of the column from the current iteration
         let col = board.map(row => row[c]);
-        console.log(col);
 
         col = slide(col);
-        console.log(col);
         // update the id of the title
         for(let r = 0; r < rows; r++){
             board[r][c] = col[r]
@@ -166,8 +152,6 @@ function slideUp(){
 }
 
 function slideDown(){
-    console.log("Slide Down");
-
     for(let c = 0; c < columns; c++){
         let col = board.map(row => row[c]);
 
@@ -208,6 +192,8 @@ function slide(row){
             row[i + 1] = 0;
 
             score += row[i];
+            console.log(row[i]);
+            updateScore();
         }
     }
 
@@ -277,5 +263,6 @@ btn.addEventListener("click", function(){
 //score system function
 function updateScore(){
     document.getElementById("score").innerText = "Score: " + score;
+    console.log("updated score: " + score);  
 }
 
