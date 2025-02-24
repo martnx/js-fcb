@@ -142,6 +142,7 @@ function slideRight(){
         }
     }
 }
+
 function slideUp(){
     console.log("Slide Up");
 
@@ -264,9 +265,17 @@ function setOne(){
 
 }
 
-//score system function
-let btn = document.getElementById("btn");
+
+//reset button
+let btn = document.getElementById("reset-btn");
 btn.addEventListener("click", function(){
-    console.log("test");
-    alert("Your score is: " + "Test Button!");
+    document.getElementById("score").innerText = "Score: " + score;
+    
+    location.reload();
 });
+
+//score system function
+function updateScore(){
+    document.getElementById("score").innerText = "Score: " + score;
+}
+

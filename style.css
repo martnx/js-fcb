@@ -18,6 +18,23 @@ h1 {
     color: black;
 }
 
+/*class selector*/
+#reset-btn{
+    color: beige;
+    background-color: #bbada0;
+    border: 2px solid #cdc1b5;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-radius: 10px;
+}
+
+#reset-btn:hover {
+    background-color: #cdc1b5;
+}
+
+
 /*id selector*/
 /*background-color - defines the color of the background, in this case the value is in hex code*/
 /*width - defines the width of the element, in this case the value is in pixels*/
