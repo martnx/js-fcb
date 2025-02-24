@@ -1,7 +1,6 @@
 // board will contain the current state of the board
 let board;
 let score = 0;
-
 let rows = 4;
 let columns = 4;
 let moveInProgress = false; // for flagging if a move is in progress
@@ -71,6 +70,9 @@ function handleSlide(event){
         }
         if (boardChanged) {
             setOne();
+        }
+        if (!hasEmptyTile() && !canMove()) {
+            stillContinue();
         }
         moveInProgress = false; // Reset the flag when the move is complete
     }
@@ -191,6 +193,20 @@ function hasEmptyTile(){
     return false;
 }
 
+function canMove() {
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < columns; c++) {
+            if (c < columns - 1 && board[r][c] == board[r][c + 1]) {
+                return true;
+            }
+            if (r < rows - 1 && board[r][c] == board[r + 1][c]) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 function setOne(){
     if(!hasEmptyTile()){
         return;
@@ -211,11 +227,7 @@ function setOne(){
 // Reset button functionality
 let btn = document.getElementById("reset-btn");
 btn.addEventListener("click", function(){
-    console.log("reset button clicked!");
-    alert("Your score is: " + score);
-    score = 0;
-    updateScore();
-    setGame();
+    location.reload();
 });
 
 // Function to update the score display
@@ -224,3 +236,14 @@ function updateScore(){
     console.log("updated score: " + score);  
 }
 
+//Function if they still want to continue to not
+function stillContinue(){
+    let scoreText = "Your Score: "
+    let text = "Your Score: "+ score + "\nGame Over! Do you want to continue?";
+    if (confirm(text) == true) {
+      location.reload();
+    } else {
+      
+    }
+}
+stillContinue()
