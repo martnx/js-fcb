@@ -4,16 +4,14 @@ let score = 0;
 
 let rows = 4;
 let columns = 4;
-let moveInProgress = false; //for flagging if a move is in progress
+let moveInProgress = false; // for flagging if a move is in progress
 
-// we are going to contain array of arrays in board, nested array, 2d arrray, matrix
+// we are going to contain array of arrays in board, nested array, 2d array, matrix
 
 // function that will set the gameboard:
 function setGame(){
-
-    // How can we initialize a 4x4 game board will al tiles set to 0
+    // How can we initialize a 4x4 game board with all tiles set to 0
     board = [
-        // How can we initalize a 4x4 game board with all tiles set to 0
         [0, 0, 0, 0],
         [0, 0, 0, 0],
         [0, 0, 0, 0],
@@ -36,13 +34,9 @@ function setGame(){
     setOne();
 }
 
-
-// function to update apperance of a file based on its number
+// function to update appearance of a tile based on its number
 function updateTile(tile, num){
-
-    //clear the title
     tile.innerText = "";
-    // clear the classList to avoid multiple classes
     tile.classList.value = "";
     tile.classList.add("tile");
     if(num > 0){
@@ -54,166 +48,138 @@ function updateTile(tile, num){
             tile.class.add("x8192");
         }
     }
-
 }
 
-// event that triggers when the web page finishes laoding. Its like saying "wait until everything on the page is ready"
+// event that triggers when the web page finishes loading
 window.onload = function(){
     setGame();
 }
 
 function handleSlide(event){
-    if(["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "KeyW", "KeyS", "KeyD","KeyA"].includes(event.code)){
-        moveInProgress = true;
-        if(event.code == "ArrowRight" || event.code == "KeyD"){
-            slideRight();
-            setOne();
-        }else if(event.code == "ArrowUp" || event.code == "KeyW"){
-            slideUp();
-            setOne();
-        }else if(event.code == "ArrowDown" || event.code == "KeyS"){
-            slideDown();
-            setOne();
-        }else if(event.code == "ArrowLeft" || event.code == "KeyA"){
-            slideLeft();
+    if (moveInProgress) return; // Prevent multiple moves at the same time
+    if(["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.code)){
+        moveInProgress = true; // Set the flag when a move starts
+        let boardChanged = false;
+        if(event.code == "ArrowRight"){
+            boardChanged = slideRight();
+        }else if(event.code == "ArrowUp"){
+            boardChanged = slideUp();
+        }else if(event.code == "ArrowDown"){
+            boardChanged = slideDown();
+        }else if(event.code == "ArrowLeft"){
+            boardChanged = slideLeft();
+        }
+        if (boardChanged) {
             setOne();
         }
-        moveInProgress = false;
+        moveInProgress = false; // Reset the flag when the move is complete
     }
-
 }
 
 // EventListener
 document.addEventListener("keydown", handleSlide);
 
 function slideLeft(){
-    for(let r = 0; r< rows; r++){
-        // current array from the row
+    let boardChanged = false;
+    for(let r = 0; r < rows; r++){
         let row = board[r]; //[0, 2, 2, 0] => [2, 2]
-
-        // [2, 0, 2, 4] => [4, 4, 0, 0]
+        let originalRow = [...row];
         row = slide(row);
-
-        // updating the current state of the board.
         board[r] = row;
-
-        // add for loop that will change the id and classes
+        if (JSON.stringify(originalRow) !== JSON.stringify(row)) {
+            boardChanged = true;
+        }
         for(let c = 0; c < columns; c++){
             let tile = document.getElementById(r + '-' + c);
             let num = board[r][c];
             updateTile(tile, num);
         }
     }
-
+    return boardChanged;
 }
 
 function slideRight(){
+    let boardChanged = false;
     for(let r = 0; r < rows; r++){
-        
-        // [0, 2, 2, 0], => [0, 0, 4, 4]
         let row = board[r];
-
-        // [0, 2, 2, 4]
+        let originalRow = [...row];
         row = row.reverse();
-
-        // [4, 4, 0, 0]
         row = slide(row);
-
-        // [0, 2, 4, 4]
         row = row.reverse();
-
         board[r] = row;
-
-        // Update to tiles
+        if (JSON.stringify(originalRow) !== JSON.stringify(row)) {
+            boardChanged = true;
+        }
         for(let c = 0; c < columns; c++){
             let tile = document.getElementById(r + '-' + c);
             let num = board[r][c];
             updateTile(tile, num);
         }
     }
+    return boardChanged;
 }
 
 function slideUp(){
+    let boardChanged = false;
     for(let c = 0; c < columns; c++){
-        // the elements of the column from the current iteration
         let col = board.map(row => row[c]);
-
+        let originalCol = [...col];
         col = slide(col);
-        // update the id of the title
         for(let r = 0; r < rows; r++){
-            board[r][c] = col[r]
-
+            board[r][c] = col[r];
+            if (originalCol[r] !== col[r]) {
+                boardChanged = true;
+            }
             let tile = document.getElementById(r + '-' + c);
             let num = board[r][c];
             updateTile(tile, num);
         }
     }
-
+    return boardChanged;
 }
 
 function slideDown(){
+    let boardChanged = false;
     for(let c = 0; c < columns; c++){
         let col = board.map(row => row[c]);
-
+        let originalCol = [...col];
         col = col.reverse();
         col = slide(col);
         col = col.reverse();
-
         for(let r = 0; r < rows; r++){
-            board[r][c] = col[r]
-
+            board[r][c] = col[r];
+            if (originalCol[r] !== col[r]) {
+                boardChanged = true;
+            }
             let tile = document.getElementById(r + '-' + c);
             let num = board[r][c];
             updateTile(tile, num);
         }
-
     }
-
-
+    return boardChanged;
 }
 
 function filterZero(row){
-    //this filter will remove all the zeros from the array
     return row.filter(num => num != 0);
 }
 
 function slide(row){
-
-    //[2,0,2,4]
-
-    //this filter will remove all the zeros from the array
     row = filterZero(row);
-    // [2,2,4] => [4, 0, 4]
-
-    //this for loop will check if there 2 adjacent numbers that are equal and combine them and change the value of the second number to 0.
     for(let i = 0; i < row.length; i++){
         if(row[i] == row[i + 1]){
             row[i] *= 2;
             row[i + 1] = 0;
-
             score += row[i];
-            console.log(row[i]);
             updateScore();
         }
     }
-
-    //[4, 0, 4] => [4, 4] => [4, 4, 0, 0]
-
-    //[4, 4]
     row = filterZero(row);
-
-    //[4, 4]
-    // add zeroes back
     while(row.length < columns){
         row.push(0);
     }
-
-    // 4, 4, 0, 0
     return row;
-
 }
 
-// Create a function that will check if there is an empty tile or none in the board
 function hasEmptyTile(){
     for(let r = 0; r < rows; r++){
         for(let c = 0; c < columns; c++){
@@ -225,42 +191,34 @@ function hasEmptyTile(){
     return false;
 }
 
-// Create a function called setOne()
-// It wil randomly create/add tile in the board
 function setOne(){
-    // early exit if there is no avaialble slot for the tile.
     if(!hasEmptyTile()){
         return;
     }
-
-    // found variable will if we are able to find a slot or position or cordinate for the title will be added.
     let found = false;
-
     while(!found){
         let r = Math.floor(Math.random()* rows);
         let c = Math.floor(Math.random()* columns);
-
         if(board[r][c] == 0){
             board[r][c] = 2;
             let tile = document.getElementById(r + '-' + c);
             updateTile(tile, board[r][c]);
-
             found = true;
         }
     }
-
 }
 
-
-//reset button
+// Reset button functionality
 let btn = document.getElementById("reset-btn");
 btn.addEventListener("click", function(){
-    document.getElementById("score").innerText = "Score: " + score;
-    
-    location.reload();
+    console.log("reset button clicked!");
+    alert("Your score is: " + score);
+    score = 0;
+    updateScore();
+    setGame();
 });
 
-//score system function
+// Function to update the score display
 function updateScore(){
     document.getElementById("score").innerText = "Score: " + score;
     console.log("updated score: " + score);  
