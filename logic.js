@@ -246,4 +246,3 @@ function stillContinue(){
       
     }
 }
-stillContinue()
